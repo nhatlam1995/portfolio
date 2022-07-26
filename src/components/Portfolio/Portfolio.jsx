@@ -1,19 +1,77 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import PortfolioList from './PortfolioList/PortfolioList'
 import './styles.scss'
+import { featuredPortfolio, webPortfolio, mobilePortfolio, designPortfolio, contentPortfolio } from '../../data'
 
 export default function Portfolio() {
+    const [selected, setSelected] = useState('featured');
+    const [dataSelected, setDataSelected] = useState([]);
+    const list = [
+        {
+            id: 'featured',
+            title: 'Featured'
+        },
+        {
+            id: 'web',
+            title: 'Web Application'
+        },
+        {
+            id: 'mobile',
+            title: 'Mobile Application'
+        },
+        {
+            id: 'design',
+            title: 'Design'
+        },
+        {
+            id: 'content',
+            title: 'Content Creator'
+        }
+    ];
+
+    useEffect(() => {
+
+        switch (selected) {
+            case 'featured':
+                setDataSelected(featuredPortfolio);
+                break;
+            case 'web':
+                setDataSelected(webPortfolio);
+                break;
+            case 'mobile':
+                setDataSelected(mobilePortfolio);
+                break;
+            case 'design':
+                setDataSelected(designPortfolio);
+                break;
+            case 'content':
+                setDataSelected(contentPortfolio);
+                break;
+            default:
+                setDataSelected(featuredPortfolio);
+        }
+
+    }, [selected])
+
     return (
         <div className="portfolio" id='portfolio'>
+            <h1>Portfolio</h1>
             <ul>
-                <li>Featured</li>
-                <li>Web App</li>
-                <li>Mobile App</li>
+                {list.map((item) => (
+                    <PortfolioList
+                        title={item.title}
+                        active={selected === item.id}
+                        setSelected={setSelected}
+                        id={item.id} />
+                ))}
             </ul>
             <div className="container">
-                <div className="item">
-                    <img src="https://cdn.dribbble.com/users/3307260/screenshots/15468444/media/447b4501f7a145b05e11c70199a9c417.jpg?compress=1&resize=1200x900" alt="" />
-                    <h3>Banking App</h3>
-                </div>
+                {dataSelected.map((item) => (
+                    <div className="item">
+                        <img src={item.img} alt="" />
+                        <h3>{item.title}</h3>
+                    </div>
+                ))}
             </div>
         </div>
     )
